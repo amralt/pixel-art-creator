@@ -35,6 +35,7 @@ function createSquares(): Square[] {
     
     return elements
 }
+
 export default function TableCanvas() {
     const elements = useRef(createSquares())
     const isPicker = useRef(false)
@@ -65,6 +66,8 @@ export default function TableCanvas() {
 
     function select(e: any) {
         const canvas = document.querySelector("canvas")
+
+        // canvas!.addEventListener('mousemove', () =>{console.log("ddd") handleMouseMove})
 
         let clickX = e.pageX - canvas!.offsetLeft,
             clickY = e.pageY - canvas!.offsetTop;
@@ -98,6 +101,14 @@ export default function TableCanvas() {
     }
 
 // TODO: сделать покраску сразу нескольких блоков при зажатии
+    function handleMouseMove(event: any) {
+        console.log('move')
+    }
+
+    function removeMouseMoveListner(event: any) {
+        const canvas = document.querySelector("canvas")
+        canvas!.removeEventListener('mousemove', handleMouseMove)
+    }
 
     function drawTable(stroked: boolean = true) {
         const canvas = document.querySelector("canvas")
@@ -156,11 +167,17 @@ export default function TableCanvas() {
         className="table" 
         style={{
             display: "flex",
+            placeItems: "center",
             flexDirection: "column",
-            justifyContent: "flex-end",
         }}
         >
-            <div style={{display: "flex", margin: "3%"}}>
+            <div 
+            style={{
+                display: "flex",
+                justifyContent: "space-around",
+                placeItems: "center",
+            }}
+            >
                 <div
                 style={{
                     display: "flex",
@@ -168,6 +185,7 @@ export default function TableCanvas() {
                     justifyContent: "space-around",
                     margin: "3%"
                 }}
+                className="container"
                 >
                     <button onClick={createCanvas}>Создать новый канвас</button>
                     <button onClick={saveCanvasAsImageFile}>Скачать результат</button>
@@ -178,12 +196,13 @@ export default function TableCanvas() {
             </div>
 
             <canvas 
+            onMouseUp={removeMouseMoveListner}
             width={tableSize * rectWidth} 
             height={tableSize * rectHeight}
             id="canvas"
             onClick={select}
             style={{
-                borderRadius: "3%",
+                borderRadius: "0.5em",
                 cursor: "crosshair",
                 }}
             >
