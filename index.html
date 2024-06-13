@@ -11,7 +11,11 @@
     <link rel="stylesheet" crossorigin href="/pixel-art-creator/assets/index-B2OyaAF-.css">
   </head>
   <body>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js">
+          if (window.Telegram) {
+            alert(window.Telegram.WebApp.initData)
+          }
+    </script>
     <div id="root"></div>
   </body>
 </html>
