@@ -9,6 +9,11 @@
     <title>pixal art creator</title>
   </head>
   <body>
+    <script src="https://telegram.org/js/telegram-web-app.js">
+          if (window.Telegram) {
+            alert(window.Telegram.WebApp.initData)
+          }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

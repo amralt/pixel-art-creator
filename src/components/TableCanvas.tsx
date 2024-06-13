@@ -1,12 +1,13 @@
 import { useRef, useState } from "react"
 import { HexColorPicker } from "react-colorful";
 import ColorPicker from "./ColorPicker";
-import colorPickerCursor from '../assets/colorpicker.png';
+import calculateSize from "../scripts/calculateSize";
+import DownloadButton from "./downloadButton";
 
 
-const tableSize: number = 16
-const rectWidth: number = 30
-const rectHeight: number = 30
+const tableSize: number = 16 // количество ячеек в ширину
+let rectWidth: number = calculateSize() // размер ячейки
+let rectHeight: number = rectWidth
 
 class Square {
     x: number;
@@ -38,10 +39,15 @@ function createSquares(): Square[] {
 
 export default function TableCanvas() {
     const elements = useRef(createSquares())
+    const [rectSize, serRectSize] = useState(rectWidth)
     const isPicker = useRef(false)
     const [color, setColor] = useState("#aabbcc");
 
     function createCanvas() {
+        rectWidth = calculateSize()
+        rectHeight = rectWidth
+        serRectSize(rectWidth)
+
         elements.current = createSquares()
 
         const canvas = document.querySelector("canvas")
@@ -51,7 +57,7 @@ export default function TableCanvas() {
         }
 
         // TODO: вычислять ширину и высоту в зависимости от экрана
-        $.clearRect(0, 0, tableSize * rectWidth, tableSize * rectHeight);
+        $.clearRect(0, 0, canvas!.width, canvas!.height);
 
         elements.current.map((element: Square) => {
             $.beginPath();
@@ -101,14 +107,14 @@ export default function TableCanvas() {
     }
 
 // TODO: сделать покраску сразу нескольких блоков при зажатии
-    function handleMouseMove(event: any) {
-        console.log('move')
-    }
+    // function handleMouseMove(event: any) {
+    //     console.log('move')
+    // }
 
-    function removeMouseMoveListner(event: any) {
-        const canvas = document.querySelector("canvas")
-        canvas!.removeEventListener('mousemove', handleMouseMove)
-    }
+    // function removeMouseMoveListner(event: any) {
+    //     const canvas = document.querySelector("canvas")
+    //     canvas!.removeEventListener('mousemove', handleMouseMove)
+    // }
 
     function drawTable(stroked: boolean = true) {
         const canvas = document.querySelector("canvas")
@@ -117,7 +123,6 @@ export default function TableCanvas() {
             return
         }
 
-        // TODO: вычислять ширину и высоту в зависимости от экрана
         $.clearRect(0, 0, tableSize * rectWidth, tableSize * rectHeight);
 
         elements.current.map((element: Square) => {
@@ -136,31 +141,10 @@ export default function TableCanvas() {
     function activatePicker() {
         isPicker.current = true
         const canvas = document.querySelector("canvas")
-        // const colorPickerCursor = 'src/assets/colorpicker.png'
-        canvas!.style.cursor = `url(${colorPickerCursor}), auto`
+        canvas!.style.cursor = `url("../assets/colorpicker.png"), auto`
     }
 
-    function getImage(canvas: any){
-        drawTable(false)
-        var imageData = canvas.toDataURL();
-        var image = new Image();
-        image.src = imageData;
-        return image;
-    }
-     
-    function saveImage(image: any) {
-        var link = document.createElement("a");
-     
-        link.setAttribute("href", image.src);
-        link.setAttribute("download", "canvasImage");
-        link.click();
-    }
-     
-    function saveCanvasAsImageFile(){
-        var image = getImage(document.getElementById("canvas"));
-        saveImage(image);
-    }
-
+    
 
     return (
         <div 
@@ -187,8 +171,12 @@ export default function TableCanvas() {
                 }}
                 className="container"
                 >
-                    <button onClick={createCanvas}>Создать новый канвас</button>
-                    <button onClick={saveCanvasAsImageFile}>Скачать результат</button>
+                    <button 
+                    onClick={createCanvas}
+                    >
+                        Создать новый канвас
+                    </button>
+                    <DownloadButton drawTable={drawTable}/>
                     <ColorPicker onClick={activatePicker}></ColorPicker>
                 </div>
 
@@ -196,9 +184,9 @@ export default function TableCanvas() {
             </div>
 
             <canvas 
-            onMouseUp={removeMouseMoveListner}
-            width={tableSize * rectWidth} 
-            height={tableSize * rectHeight}
+            // onMouseUp={removeMouseMoveListner}
+            width={tableSize * rectSize} 
+            height={tableSize * rectSize}
             id="canvas"
             onClick={select}
             style={{

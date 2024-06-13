@@ -28,7 +28,6 @@ const ThemeIcon = () => {
   
     function matchColorTheme() {
       const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
-      alert(darkThemeMq.matches)
       if (darkThemeMq.matches) {
         setScheme('dark')
       } else {
