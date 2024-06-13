@@ -55,7 +55,7 @@ const ThemeIcon = () => {
         }}
     onClick={changeTheme}
     >
-        change theme
+        Сменить тему
     </button>
   );
 };

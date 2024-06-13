@@ -11,7 +11,7 @@ export default function ColorPicker({onClick} : ColorPickerProps) {
 
     return (
         <button onClick={activatePicker}>
-            <img src="src\assets\colorpicker.png" alt="пипетка" width={"30px"}/>
+            <img src="pixel-art-creator\colorpicker.png" alt="пипетка" width={"30px"}/>
         </button>
     )
 }

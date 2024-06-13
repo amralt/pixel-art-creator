@@ -15,33 +15,21 @@ class Square {
     color: string;
     isSelected: boolean;
     
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, color: string) {
         this.x = x
         this.y = y
-        this.color = "#c74e4e"
+        this.color = color
         this.isSelected = false
     }
     
 }
 
-function createSquares(): Square[] {
-    const elements: Square[] = []
-    
-
-    for (let y = 0; y < tableSize; y++) {
-        for (let x = 0; x < tableSize; x++) {
-            elements.push(new Square(x* rectWidth, y* rectHeight));
-        }
-    }
-    
-    return elements
-}
 
 export default function TableCanvas() {
-    const elements = useRef(createSquares())
     const [rectSize, serRectSize] = useState(rectWidth)
-    const isPicker = useRef(false)
     const [color, setColor] = useState("#aabbcc");
+    const elements = useRef(createSquares())
+    const isPicker = useRef(false)
 
     function createCanvas() {
         rectWidth = calculateSize()
@@ -68,6 +56,20 @@ export default function TableCanvas() {
             $.fill();
             $.stroke();
         })
+    }
+
+
+    function createSquares(): Square[] {
+        const elements: Square[] = []
+        
+
+        for (let y = 0; y < tableSize; y++) {
+            for (let x = 0; x < tableSize; x++) {
+                elements.push(new Square(x* rectWidth, y* rectHeight, color));
+            }
+        }
+        
+        return elements
     }
 
     function select(e: any) {
@@ -141,7 +143,7 @@ export default function TableCanvas() {
     function activatePicker() {
         isPicker.current = true
         const canvas = document.querySelector("canvas")
-        canvas!.style.cursor = `url("../assets/colorpicker.png"), auto`
+        canvas!.style.cursor = `url("pixel-art-creator/colorpicker.png"), auto`
     }
 
     
